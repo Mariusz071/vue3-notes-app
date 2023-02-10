@@ -11,6 +11,8 @@ v-app
           :icon="isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"
           @click="isOpen = !isOpen"
         )
+      template(#append)
+        small(v-if="authStore.user") {{ authStore.user.email }}
     MainNav(v-model="isOpen")
     v-main
       Container
