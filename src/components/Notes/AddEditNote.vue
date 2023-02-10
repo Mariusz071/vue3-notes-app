@@ -1,5 +1,5 @@
 <template lang="pug">
-v-card.pa-2.pb-0.mb-10
+v-card.pa-2.pb-0.mb-8
   v-textarea(
     v-model="noteContent"
     autofocus

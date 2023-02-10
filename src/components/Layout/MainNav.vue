@@ -16,7 +16,7 @@ v-navigation-drawer(
       v-icon.mr-2 {{ item.icon }}
       | {{ item.label }}
     template(v-if="!!storeAuth.user")
-      v-divider
+      v-divider.mt-4
       v-list-item(
         @click="onLogout"
       ) 
