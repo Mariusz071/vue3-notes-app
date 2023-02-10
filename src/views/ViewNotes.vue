@@ -1,27 +1,30 @@
-<template>
-  <div class="notes">
-    <AddEditNote />
-    <Progressbar v-if="store.isLoading" />
-    <template v-else>
-      <Note
-        v-for="note in store.notes"
-        :key="note.id"
-        v-bind="{ note }"
-      />
-    </template>
-    <div
-      v-if="isPlaceholderVisible"
-      class="is-size-4 has-text-centered has-text-grey-light is-family-monospace py-6"
-    >
-      There's no notes added yet.
-    </div>
-  </div>
+<template lang="pug">
+Container
+  AddEditNote
+  v-progress-linear(
+    v-if="store.isLoading"
+    indeterminate
+  )
+  template(v-else)
+    Note(
+    v-for="note in store.notes"
+    v-bind="{ note }"
+    :key="note.id"
+  )
+  v-card.mx-auto(
+    v-if="isPlaceholderVisible"
+    variant="tonal"
+    max-width="300"
+  )
+    template(#text) There's no notes added yet.
+
 </template>
 
 <script setup>
 // imports
 import { computed } from 'vue'
 import { useNotesStore } from '@/stores/useNotesStore'
+import Container from '@/components/Layout/Container.vue'
 import Note from '@/components/Notes/Note.vue'
 import AddEditNote from '@/components/Notes/AddEditNote.vue'
 import Progressbar from '@/components/Layout/Progressbar.vue'
