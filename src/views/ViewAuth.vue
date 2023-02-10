@@ -1,15 +1,14 @@
 <template lang="pug">
-Container
-  v-tabs.mb-2(
-    :value="route.name"
-    align-tabs="center"
-  )
-    v-tab(
-      v-for="({ value, to, label }) in tabs"
-      :key="value"
-      v-bind="{ value, to }"
-    ) {{ label }}
-  router-view
+v-tabs.mb-2(
+  :value="route.name"
+  align-tabs="center"
+)
+  v-tab(
+    v-for="({ value, to, label }) in tabs"
+    :key="value"
+    v-bind="{ value, to }"
+  ) {{ label }}
+router-view
 </template>
 
 <script setup>
@@ -17,7 +16,6 @@ Container
 import { computed } from 'vue'
 import { RouterView } from 'vue-router'
 import { useRoute } from 'vue-router'
-import Container from '@/components/Layout/Container.vue'
 
 // router
 const route = useRoute()

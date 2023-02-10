@@ -13,11 +13,12 @@ v-app
         )
     MainNav(v-model="isOpen")
     v-main
-      v-progress-linear(
-        v-if="authStore.isLoading"
-        indeterminate
-      )
-      RouterView(v-else)
+      Container
+        v-progress-linear(
+          v-if="authStore.isLoading"
+          indeterminate
+        )
+        RouterView(v-else)
 </template>
 
 <script setup>
@@ -26,7 +27,7 @@ import { onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
 import { APP_BAR_HEIGHT } from '@/js/consts'
 import { useAuthStore } from '@/stores/useAuthStore'
-
+import Container from '@/components/Layout/Container.vue'
 import MainNav from '@/components/Layout/MainNav.vue'
 
 // store
