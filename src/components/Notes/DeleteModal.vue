@@ -1,42 +1,42 @@
-<template>
-  <div class="modal is-active p-4">
-    <div class="modal-background"></div>
-    <div
-      class="modal-card"
-      ref="refDeleteModal"
-    >
-      <header class="modal-card-head">
-        <p class="modal-card-title">Delete note?</p>
-        <button
-          class="delete"
-          aria-label="close"
+<template lang="pug">
+v-dialog(
+  :model-value="modelValue"
+  width="500"
+)
+  v-card
+    template(#title)
+      div.d-flex.justify-space-between.align-center
+        | Delete Note?
+        v-btn(
+          icon="fa-solid fa-xmark"
+          variant="tonal"
+          size="x-small"
           @click="closeModal"
-        ></button>
-      </header>
-      <section class="modal-card-body">
-        Are sure you want to delete this note?
-      </section>
-      <footer class="modal-card-foot is-justify-content-flex-end">
-        <button
-          class="button is-danger"
-          @click="onDelete"
-        >
-          Delete
-        </button>
-        <button
-          class="button"
-          @click="closeModal"
-        >
-          Cancel
-        </button>
-      </footer>
-    </div>
-  </div>
+        )
+    template(#text) Are sure you want to delete this note?
+    v-card-actions.justify-end
+      v-btn(
+        size="small"
+        variant="tonal"
+        @click="closeModal"
+      )
+        v-icon.mr-1 far fa-pen-to-square
+        | Cancel
+      v-btn(
+        size="small"
+        variant="tonal"
+        color="error"
+        @click="onDelete"
+      ) 
+        v-icon.mr-1 fa-solid fa-trash-can
+        | Delete
+
+
+
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { onMounted, onUnmounted } from 'vue'
 import { useNotesStore } from '@/stores/useNotesStore'
 
 // props
@@ -59,8 +59,6 @@ const store = useNotesStore()
 
 // closing modal
 const closeModal = () => emit('update:modelValue', false)
-const refDeleteModal = ref(null)
-onClickOutside(refDeleteModal, closeModal)
 
 // deleting note
 const onDelete = () => store.removeNote(props.noteId)

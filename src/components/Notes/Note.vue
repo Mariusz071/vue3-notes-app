@@ -1,42 +1,37 @@
-<template>
-  <div
-    class="card mb-4"
-    :key="note.id"
-  >
-    <DeleteModal
-      v-if="modals.delete"
-      v-model="modals.delete"
-      :note-id="note.id"
-    />
-    <div class="card-content">
-      <div class="content">
-        {{ note.content }}
-        <div class="columns-is-mobile has-text-grey-light mt-2">
-          <small class="column">{{ formattedDate }}</small>
-          <small class="column has-text-right">{{ noteLengthInfo }} </small>
-        </div>
-      </div>
-    </div>
-    <footer class="card-footer">
-      <RouterLink
-        class="card-footer-item"
-        :to="`edit/${note.id}`"
-        >Edit
-      </RouterLink>
-      <a
-        href="#"
-        class="card-footer-item"
-        @click.prevent="modals.delete = true"
-      >
-        Delete
-      </a>
-    </footer>
-  </div>
+<template lang="pug">
+DeleteModal(
+  v-model="isDeleteModal"
+  :note-id="note.id"
+)
+v-card.pa-2.pb-0.my-4
+  template(#subtitle)
+    small {{ formattedDate}}
+    small {{ note.lengthInfo}}
+  template(#text) {{ note.content}}
+  v-divider
+  v-card-actions.justify-end
+    v-btn(
+      size="small"
+      variant="tonal"
+      link
+      :to="`edit/${note.id}`"
+    )
+      v-icon.mr-1 far fa-pen-to-square
+      | Edit
+    v-btn(
+      size="small"
+      variant="tonal"
+      color="error"
+      @click="isDeleteModal = true"
+    ) 
+      v-icon.mr-1 fa-solid fa-trash-can
+      | Delete
+
 </template>
 
 <script setup>
 // imports
-import { computed, reactive } from 'vue'
+import { computed, ref } from 'vue'
 import { useDateFormat } from '@vueuse/core'
 import { useNotesStore } from '@/stores/useNotesStore'
 import DeleteModal from '@/components/Notes/DeleteModal.vue'
@@ -66,8 +61,6 @@ const formattedDate = computed(() => {
   return useDateFormat(date, 'DD-MM-YYYY @ HH:mm').value
 })
 
-// modals
-const modals = reactive({
-  delete: false
-})
+// delete modal control
+const isDeleteModal = ref(false)
 </script>
