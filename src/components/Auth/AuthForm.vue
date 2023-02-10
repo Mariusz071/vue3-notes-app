@@ -1,64 +1,40 @@
-<template>
-  <div class="auth-form">
-    <div class="card">
-      <div class="card-content">
-        <div class="title has-text-centered">{{ header }}</div>
-        <div class="content">
-          <form @submit.prevent="onSubmit">
-            <div class="field">
-              <label class="label">Email</label>
-              <div class="control">
-                <input
-                  v-model="data.email"
-                  :class="{ input: true, 'is-danger': showEmailErrors }"
-                  placeholder="e.g. alexsmith@gmail.com"
-                  @input="v$.email.$touch()"
-                />
-                <template v-if="showEmailErrors">
-                  <span
-                    class="help is-danger"
-                    v-for="error of v$.email.$errors"
-                    :key="error.$uid"
-                    >{{ error.$message }}</span
-                  >
-                </template>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Password</label>
-              <div class="control">
-                <input
-                  v-model="data.password"
-                  :class="{ input: true, 'is-danger': showPasswordErrors }"
-                  type="password"
-                  placeholder="Enter the password"
-                  @input="v$.password.$touch()"
-                />
-                <template v-if="showPasswordErrors">
-                  <span
-                    class="help is-danger"
-                    v-for="error of v$.password.$errors"
-                    :key="error.$uid"
-                    >{{ error.$message }}
-                  </span>
-                </template>
-              </div>
-            </div>
-            <span
-              v-if="authStore.error"
-              class="help is-danger"
-              >{{ authStore.error }}
-            </span>
-            <div class="field is-grouped is-grouped-right">
-              <p class="control">
-                <button :class="submitBtnClasses">{{ header }}</button>
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+v-card(color="darkbg")
+  template(#title) {{ header }}
+  template(#text)
+    v-form(
+      @submit.prevent="onSubmit"
+    )
+      v-text-field.mb-2(
+        v-model="data.email"
+        variant="outlined"
+        density="comfortable"
+        autofocus
+        required
+        :error-messages="isFormSubmitted && emailErrors"
+        @inerut="v$.email.$touch()"
+      )
+      v-text-field(
+        v-model="data.password"
+        variant="outlined"
+        density="comfortable"
+        type="password"
+        required
+        placeholder="Enter the password"
+        :error-messages="isFormSubmitted && passwordErrors"
+        @input="v$.password.$touch()"
+      )
+
+      div.pl-3.v-messages__message.auth-error(
+        v-if="authStore.error"
+        class="help is-danger"
+      ) {{ authStore.error }}
+          
+      div.d-flex.flex-1.align-center.justify-end
+        v-btn(
+          type="submit"
+          :loading="isLoading"
+        ) {{ header }}
 </template>
 
 <script setup>
@@ -104,14 +80,12 @@ const rules = computed(() => ({
 }))
 const isFormSubmitted = ref(false)
 const v$ = useVuelidate(rules, data)
-const emailErrors = computed(() => v$.value.email.$errors)
-const passwordErrors = computed(() => v$.value.password.$errors)
-const showEmailErrors = computed(
-  () => emailErrors.value.length && isFormSubmitted.value
-)
-const showPasswordErrors = computed(
-  () => passwordErrors.value.length && isFormSubmitted.value
-)
+const emailErrors = computed(() => {
+  return v$.value.email.$errors.map(item => item.$message)
+})
+const passwordErrors = computed(() => {
+  return v$.value.password.$errors.map(item => item.$message)
+})
 
 // submit
 const onSubmit = async () => {
@@ -135,8 +109,7 @@ const onSubmit = async () => {
 </script>
 
 <style scoped>
-.auth-form {
-  max-width: 400px;
-  margin: 0 auto;
+.auth-error {
+  color: rgb(255, 82, 82);
 }
 </style>

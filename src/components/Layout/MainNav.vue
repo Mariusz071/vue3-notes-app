@@ -57,6 +57,5 @@ const navItems = computed(() => [
 
 const onLogout = () => {
   storeAuth.onLogout()
-  isMobileNav.value = false
 }
 </script>
