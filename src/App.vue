@@ -1,18 +1,22 @@
 <template lang="pug">
 v-app
-  v-app-bar(
-    color="primary"
-    title="Notes App"
-  )
-    template(#prepend)
-      v-btn(
-        :icon="isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"
-        @click="isOpen = !isOpen"
+  v-layout
+    v-app-bar(
+      :height="APP_BAR_HEIGHT"
+      color="primary"
+      title="Notes App"
+    )
+      template(#prepend)
+        v-btn(
+          :icon="isOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'"
+          @click="isOpen = !isOpen"
+        )
+    MainNav(v-model="isOpen")
+    v-main
+      v-progress-linear(
+        v-if="authStore.isLoading"
+        indeterminate
       )
-  MainNav(v-model="isOpen")
-  v-main
-    v-card
-      Progressbar(v-if="authStore.isLoading")
       RouterView(v-else)
 </template>
 
@@ -20,9 +24,10 @@ v-app
 // imports
 import { onMounted, ref } from 'vue'
 import { RouterView } from 'vue-router'
-import MainNav from '@/components/Layout/MainNav.vue'
-import Progressbar from '@/components/Layout/Progressbar.vue'
+import { APP_BAR_HEIGHT } from '@/js/consts'
 import { useAuthStore } from '@/stores/useAuthStore'
+
+import MainNav from '@/components/Layout/MainNav.vue'
 
 // store
 const authStore = useAuthStore()

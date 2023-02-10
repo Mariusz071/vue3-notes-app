@@ -1,20 +1,31 @@
 <template lang="pug">
-v-container(:class="containerClasses[containerStyle]")
+v-container(
+  :style="{ maxWidth: containerWidth, height: `calc(100vh - ${APP_BAR_HEIGHT}px)`}"
+)
   slot
 </template>
 <script setup>
-// props
-const props = defineProps({
-  containerStyle: {
-    type: String,
-    default: 'normal',
-    validator: value => ['narrow', 'normal', 'wide'].includes(value)
+// imports
+import { computed } from 'vue'
+import { useDisplay } from 'vuetify'
+import { APP_BAR_HEIGHT } from '@/js/consts'
+
+const { name } = useDisplay()
+
+const containerWidth = computed(() => {
+  switch (name.value) {
+    case 'xs':
+      return '100%'
+    case 'sm':
+      return '85%'
+    case 'md':
+      return '75%'
+    case 'lg':
+      return '75%'
+    case 'xl':
+      return '60%'
+    case 'xxl':
+      return '50%'
   }
 })
-
-const containerClasses = {
-  narrow: ['col-xl-6', 'col-md-8', 'col-sm-12', 'py-6'],
-  normal: ['col-xl-8', 'col-md-11', 'col-sm-12', 'py-6'],
-  wide: ['col-xl-10', 'col-md-11', 'col-sm-12', 'py-6']
-}
 </script>
